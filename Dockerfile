@@ -11,6 +11,5 @@ FROM scratch
 ENV RECON_DB_DIR='/var/lib/recon'
 ENV RECON_ADDR=':8080'
 # Copy our static executable
-COPY --from=builder /etc/ssl/certs /etc/ssl/certs
 COPY --from=builder /home/go/Recon/service /app/service
 ENTRYPOINT ["/app/service"]
