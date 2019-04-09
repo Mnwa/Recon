@@ -3,7 +3,9 @@ package main
 import (
 	"Recon/database"
 	"fmt"
+	"github.com/prologic/bitcask"
 	"log"
+	"os"
 
 	"github.com/buaazp/fasthttprouter"
 	"github.com/valyala/fasthttp"
@@ -14,6 +16,21 @@ func Index(ctx *fasthttp.RequestCtx) {
 }
 
 func main() {
+	var err error
+	dbDir := os.Getenv("RECON_DB_DIR")
+	if dbDir == "" {
+		dbDir = "/var/lib/recon"
+	}
+
+	addr := os.Getenv("RECON_ADDR")
+	if addr == "" {
+		addr = ":8080"
+	}
+
+	database.Client, err = bitcask.Open(dbDir)
+	if err != nil {
+		log.Fatal(err)
+	}
 	defer database.Client.Close()
 	router := fasthttprouter.New()
 	router.GET("/", Index)
@@ -28,5 +45,7 @@ func main() {
 	router.POST("/:project/:type/env/:key", UpdateKeyEnv)
 	router.DELETE("/:project/:type/env/:key", DeleteKeyEnv)
 
-	log.Fatal(fasthttp.ListenAndServe(":8080", router.Handler))
+	log.Println("Recon started")
+
+	log.Fatal(fasthttp.ListenAndServe(addr, router.Handler))
 }
