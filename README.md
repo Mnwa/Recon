@@ -54,3 +54,10 @@ with `:projectType` merge priority
 * [Environment usage](./docs/ENV.md)
 * [Make backups](./docs/BACKUPS.md)
 * [Prometheus metrics](./docs/PROMETHEUS.md)
+
+#Thanks for community of that's packages
+ 🎉 🎉 🎉 🎉
+* [fasthttp](https://github.com/valyala/fasthttp)
+* [fasthttprouter](https://github.com/buaazp/fasthttprouter)
+* [fasthttp-prometheus](https://github.com/flf2ko/fasthttp-prometheus)
+* [bitcask](https://github.com/prologic/bitcask)
