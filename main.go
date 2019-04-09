@@ -35,6 +35,7 @@ func main() {
 	router := fasthttprouter.New()
 	router.GET("/", Index)
 
+	// Env based
 	router.GET("/:project/:type/env", GetEnv)
 	router.PUT("/:project/:type/env", CreateEnv)
 	router.POST("/:project/:type/env", UpdateEnv)
@@ -44,6 +45,17 @@ func main() {
 	router.PUT("/:project/:type/env/:key", CreateKeyEnv)
 	router.POST("/:project/:type/env/:key", UpdateKeyEnv)
 	router.DELETE("/:project/:type/env/:key", DeleteKeyEnv)
+
+	// Default kv
+	router.GET("/:project/:type/config", GetDefault)
+	router.PUT("/:project/:type/config", CreateDefault)
+	router.POST("/:project/:type/config", UpdateDefault)
+	router.DELETE("/:project/:type/config", DeleteDefault)
+
+	router.GET("/:project/:type/config/:key", GetKeyDefault)
+	router.PUT("/:project/:type/config/:key", CreateKeyDefault)
+	router.POST("/:project/:type/config/:key", UpdateKeyDefault)
+	router.DELETE("/:project/:type/config/:key", DeleteKeyDefault)
 
 	log.Println("Recon started")
 
