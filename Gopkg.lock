@@ -2,12 +2,28 @@
 
 
 [[projects]]
+  branch = "master"
+  digest = "1:d6afaeed1502aa28e80a4ed0981d570ad91b2579193404256ce672ed0a609e0d"
+  name = "github.com/beorn7/perks"
+  packages = ["quantile"]
+  pruneopts = "UT"
+  revision = "3a771d992973f24aa725d07868b467d1ddfceafb"
+
+[[projects]]
   digest = "1:652880afc6b57ce0a67173f552cb35ccda816493a1da6ca20e5074a66bcd083f"
   name = "github.com/buaazp/fasthttprouter"
   packages = ["."]
   pruneopts = "UT"
   revision = "ade4e2031af3aed7fffd241084aad80a58faf421"
   version = "v0.1.1"
+
+[[projects]]
+  branch = "master"
+  digest = "1:0b208def97407009fc40151824e17d6eb762a3d58690c4c0f92dbcea6580e548"
+  name = "github.com/flf2ko/fasthttp-prometheus"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "aa96d38e11cfed45678a5e1204091bc09f99b8fc"
 
 [[projects]]
   digest = "1:d7b2d6ad2a9768bb5c9e3bfa4d9ceaa635ca2737cca288507986f116fa4b8da2"
@@ -54,6 +70,14 @@
   version = "v1.2.0"
 
 [[projects]]
+  digest = "1:ff5ebae34cfbf047d505ee150de27e60570e8c394b3b8fdbb720ff6ac71985fc"
+  name = "github.com/matttproud/golang_protobuf_extensions"
+  packages = ["pbutil"]
+  pruneopts = "UT"
+  revision = "c12348ce28de40eed0136aa2b644d0ee0650e56c"
+  version = "v1.0.1"
+
+[[projects]]
   digest = "1:cf31692c14422fa27c83a05292eb5cbe0fb2775972e8f1f8446a71549bd8980b"
   name = "github.com/pkg/errors"
   packages = ["."]
@@ -83,6 +107,46 @@
   revision = "3972df81f9b588faa8d3c84f835ec95f13a50836"
 
 [[projects]]
+  digest = "1:93a746f1060a8acbcf69344862b2ceced80f854170e1caae089b2834c5fbf7f4"
+  name = "github.com/prometheus/client_golang"
+  packages = [
+    "prometheus",
+    "prometheus/internal",
+    "prometheus/promhttp",
+  ]
+  pruneopts = "UT"
+  revision = "505eaef017263e299324067d40ca2c48f6a2cf50"
+  version = "v0.9.2"
+
+[[projects]]
+  branch = "master"
+  digest = "1:2d5cd61daa5565187e1d96bae64dbbc6080dacf741448e9629c64fd93203b0d4"
+  name = "github.com/prometheus/client_model"
+  packages = ["go"]
+  pruneopts = "UT"
+  revision = "fd36f4220a901265f90734c3183c5f0c91daa0b8"
+
+[[projects]]
+  digest = "1:35cf6bdf68db765988baa9c4f10cc5d7dda1126a54bd62e252dbcd0b1fc8da90"
+  name = "github.com/prometheus/common"
+  packages = [
+    "expfmt",
+    "internal/bitbucket.org/ww/goautoneg",
+    "model",
+  ]
+  pruneopts = "UT"
+  revision = "cfeb6f9992ffa54aaa4f2170ade4067ee478b250"
+  version = "v0.2.0"
+
+[[projects]]
+  branch = "master"
+  digest = "1:f806b417865e83457c3659232926203f5b0d39aa741b71d9e3e4c0c774e71a5c"
+  name = "github.com/prometheus/procfs"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "ea9eea63887261e4d8ed8315f4078e88d540c725"
+
+[[projects]]
   digest = "1:c468422f334a6b46a19448ad59aaffdfc0a36b08fdcc1c749a0b29b6453d7e59"
   name = "github.com/valyala/bytebufferpool"
   packages = ["."]
@@ -91,10 +155,11 @@
   version = "v1.0.0"
 
 [[projects]]
-  digest = "1:15ad8a80098fcc7a194b9db6b26d74072a852e4faa957848c8118193d3c69230"
+  digest = "1:d86cac316ca3b1ac9d46e5a249a3aa88305d172b5abd140cecd0216b299364e5"
   name = "github.com/valyala/fasthttp"
   packages = [
     ".",
+    "fasthttpadaptor",
     "fasthttputil",
     "stackless",
   ]
@@ -115,6 +180,7 @@
   analyzer-version = 1
   input-imports = [
     "github.com/buaazp/fasthttprouter",
+    "github.com/flf2ko/fasthttp-prometheus",
     "github.com/prologic/bitcask",
     "github.com/valyala/fasthttp",
   ]

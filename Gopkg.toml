@@ -40,3 +40,7 @@
 [[constraint]]
   name = "github.com/prologic/bitcask"
   version = "0.1.6"
+
+[[constraint]]
+  branch = "master"
+  name = "github.com/flf2ko/fasthttp-prometheus"
