@@ -43,16 +43,11 @@ func (e *Env) CreateKey(project string, projectType string, key string, data []b
 }
 
 func (e *Env) Update(project string, projectType string, data []byte) error {
-	var oldData, err = e.Get(project, projectType)
-	if err != nil {
-		return nil
-	}
-
-	e.parseEnv(oldData)
+	var err error
 	e.parseEnv(data)
 	for key, value := range e.data {
 		storageKey := strings.ToLower(project + "/" + projectType + "/" + key)
-		err = database.Client.Put(storageKey, value)
+		err := database.Client.Put(storageKey, value)
 
 		if err != nil {
 			break
@@ -73,11 +68,19 @@ func (e *Env) UpdateKey(project string, projectType string, key string, data []b
 
 func (e *Env) Get(project string, projectType string) ([]byte, error) {
 	var data = ""
+	if projectType != "default" {
+		defaultData, err := e.Get(project, "default")
+		data = string(defaultData)
+
+		if err != nil {
+			return nil, err
+		}
+	}
 	storageKey := strings.ToLower(project + "/" + projectType + "/")
 	err := database.Client.Scan(storageKey, func(key string) error {
 		if database.Client.Has(key) {
 			value, err := database.Client.Get(key)
-			data += strings.ToUpper(strings.ReplaceAll(key, storageKey, "")) + "=" + strings.ToUpper(string(value)) + "\n"
+			data += strings.ToUpper(strings.ReplaceAll(key, storageKey, "")) + "=" + string(value) + "\n"
 			return err
 		} else {
 			return nil

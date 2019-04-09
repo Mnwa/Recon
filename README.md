@@ -36,5 +36,19 @@ Recon can be configured with environment:
 
 # Recon usage
 
+## Introduction 
+Recon have are simple standard based on LDAP. 
+It's used default http requests methods (PUT, POST, GET, DELETE) and path like are:
+`/:projectName/:projectType/:dataType`  where:
+* `:projectName String` name of you project
+* `:projectType String` project type 
+* `:dataType String` type of you data input/output (Supports [env](./docs/ENV.md), [config](./docs/CONFIG.md))
+
+## Project type configuration
+Every project have `default` type and it type will be merged with other types of you project.
+When you try to GET `/:projectName/:projectType/:dataType` it's will be return `/:projectName/default/:dataType` + `/:projectName/:projectType/:dataType`
+with `:projectType` merge priority
+## Examples
+
 * [Default kv usage](./docs/CONFIG.md)
 * [Environment usage](./docs/ENV.md)

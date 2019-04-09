@@ -42,12 +42,8 @@ func (e *Default) CreateKey(project string, projectType string, key string, data
 }
 
 func (e *Default) Update(project string, projectType string, data []byte) error {
-	var oldData, err = e.Get(project, projectType)
-	if err != nil {
-		return nil
-	}
+	var err error
 
-	e.parseDefault(oldData)
 	e.parseDefault(data)
 	for key, value := range e.data {
 		storageKey := strings.ToLower(project + "/" + projectType + "/" + key)
@@ -72,11 +68,19 @@ func (e *Default) UpdateKey(project string, projectType string, key string, data
 
 func (e *Default) Get(project string, projectType string) ([]byte, error) {
 	var data = ""
+	if projectType != "default" {
+		defaultData, err := e.Get(project, "default")
+		data = string(defaultData)
+
+		if err != nil {
+			return nil, err
+		}
+	}
 	storageKey := strings.ToLower(project + "/" + projectType + "/")
 	err := database.Client.Scan(storageKey, func(key string) error {
 		if database.Client.Has(key) {
 			value, err := database.Client.Get(key)
-			data += strings.ReplaceAll(key, storageKey, "") + "=" + strings.ToUpper(string(value)) + "\n"
+			data += strings.ReplaceAll(key, storageKey, "") + "=" + string(value) + "\n"
 			return err
 		} else {
 			return nil
