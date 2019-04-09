@@ -49,19 +49,8 @@ Every project have `default` type and it type will be merged with other types of
 When you try to GET `/:projectName/:projectType/:dataType` it's will be return `/:projectName/default/:dataType` + `/:projectName/:projectType/:dataType`
 with `:projectType` merge priority
 
-## Prometheus metrics
-Recon have basic prometheus metrics on root path
-```http request
-GET /
-
-### 
-
-recon_request_duration_seconds_bucket{code="200",le="0.005"} 2
-recon_request_duration_seconds_bucket{code="200",le="0.01"} 2
-recon_request_duration_seconds_bucket{code="200",le="0.025"} 2
-```
-
 ## Usages
 * [Default kv usage](./docs/CONFIG.md)
 * [Environment usage](./docs/ENV.md)
 * [Make backups](./docs/BACKUPS.md)
+* [Prometheus metrics](./docs/PROMETHEUS.md)
