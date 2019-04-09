@@ -55,8 +55,7 @@ with `:projectType` merge priority
 * [Make backups](./docs/BACKUPS.md)
 * [Prometheus metrics](./docs/PROMETHEUS.md)
 
-# Thanks for community of that's packages
-
+# Thanks for community of that's packages!
  🎉 🎉 🎉 🎉
 * [fasthttp](https://github.com/valyala/fasthttp)
 * [fasthttprouter](https://github.com/buaazp/fasthttprouter)
