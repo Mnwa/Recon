@@ -3,7 +3,7 @@ FROM golang:alpine as builder
 COPY . $GOPATH/src/Recon/
 WORKDIR $GOPATH/src/Recon/
 
-RUN apk add git gcc && \
+RUN apk add git && \
     go get -u github.com/golang/dep/cmd/dep && \
     dep ensure
 RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -a -installsuffix cgo -ldflags="-w -s" -o /home/go/Recon/service
