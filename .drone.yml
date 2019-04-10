@@ -1,12 +1,13 @@
 kind: pipeline
 name: default
 
+workspace:
+  base: /go
+  path: src/Recon
+
 steps:
   - name: build
     image: golang:alpine
-    workspace:
-      base: /go
-      path: src/Recon
     commands:
       - apk add git
       - go get -u github.com/golang/dep/cmd/dep
