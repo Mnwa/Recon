@@ -32,6 +32,15 @@ RECON_DB_DIR=/tmp/recon ./build/service
 ```
 
 ## Docker
+### Docker Hub
+```bash
+docker pull mnwamnowich/recon
+```
+Run:
+```bash
+docker run -p 8080:8080 --name recon mnwamnowich/recon
+```
+### Build from sources
 Build the image:
 ```bash
 docker build -t recon_build . 
