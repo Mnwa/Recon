@@ -1,4 +1,9 @@
 # Recon
+[![Build Status](https://cloud.drone.io/api/badges/Mnwa/Recon/status.svg)](https://cloud.drone.io/Mnwa/Recon)
+[![Go Report Card](https://goreportcard.com/badge/Mnwa/Recon)](https://goreportcard.com/report/Mnwa/Recon)
+[![GitHub license](https://img.shields.io/github/license/Mnwa/Recon.svg)](https://github.com/Mnwa/Recon)
+[![Github all releases](https://img.shields.io/github/downloads/Mnwa/Recon/total.svg)](https://github.com/Mnwa/Recon/releases)
+
 LDAP based key/value store with env support
 
 Now it have only env data support
