@@ -1,4 +1,3 @@
-[![Open Source Helpers](https://www.codetriage.com/mnwa/recon/badges/users.svg)](https://www.codetriage.com/mnwa/recon)
 # Recon
 LDAP based key/value store with env support
 
