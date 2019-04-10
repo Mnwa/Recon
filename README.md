@@ -4,17 +4,20 @@ LDAP based key/value store with env support
 Now it have only env data support
 
 # Run
-Recon it's simple golang app and it's don't need some requirements, only go
+Recon it's simple golang app and it's requirements only [go](https://golang.org/) and [dep](https://github.com/golang/dep)
 
 ## Unix
+Install dependencies:
+```bash
+dep ensure
+```
 Compile sources:
 ```bash
 go build -o ./build/service
 ```
 Run binary:
 ```bash
-cd ./build
-RECON_DB_DIR=/tmp/recon ./service
+RECON_DB_DIR=/tmp/recon ./build/service
 ```
 
 ## Docker
