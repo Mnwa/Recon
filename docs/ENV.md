@@ -2,7 +2,7 @@
 
 ## Create project environment
 ```http
-PUT http://localhost:8080/projectName/projectType/env
+PUT http://localhost:8080/projects/projectName/projectType/env
 Accept: */*
 Cache-Control: no-cache
 Content-Type: text/plain
@@ -17,7 +17,7 @@ VAR_TWO=2
 ```
 ## Add key to project environment
 ```http
-PUT http://localhost:8080/projectName/projectType/env/VAR_THREE
+PUT http://localhost:8080/projects/projectName/projectType/env/VAR_THREE
 Accept: */*
 Cache-Control: no-cache
 Content-Type: text/plain
@@ -31,7 +31,7 @@ Content-Type: text/plain
 
 ## Update project environment
 ```http
-POST http://localhost:8080/projectName/projectType/env
+POST http://localhost:8080/projects/projectName/projectType/env
 Accept: */*
 Cache-Control: no-cache
 Content-Type: text/plain
@@ -49,7 +49,7 @@ VAR_FIVE=5
 ```
 ## Update key of project environment
 ```http
-POST http://localhost:8080/projectName/projectType/env/VAR_FIVE
+POST http://localhost:8080/projects/projectName/projectType/env/VAR_FIVE
 Accept: */*
 Cache-Control: no-cache
 Content-Type: text/plain
@@ -63,7 +63,7 @@ Content-Type: text/plain
 
 ## Get project environment
 ```http
-GET http://localhost:8080/projectName/projectType/env
+GET http://localhost:8080/projects/projectName/projectType/env
 Accept: */*
 Cache-Control: no-cache
 
@@ -77,7 +77,7 @@ VAR_FIVE=10
 ```
 ## Get key of project environment
 ```http
-GET http://localhost:8080/projectName/projectType/env/VAR_FIVE
+GET http://localhost:8080/projects/projectName/projectType/env/VAR_FIVE
 Accept: */*
 Cache-Control: no-cache
 
@@ -88,7 +88,7 @@ Cache-Control: no-cache
 
 ## DELETE project environment
 ```http
-DELETE http://localhost:8080/projectName/projectType/env
+DELETE http://localhost:8080/projects/projectName/projectType/env
 Accept: */*
 Cache-Control: no-cache
 
@@ -98,7 +98,7 @@ Deleted
 ```
 ## DELETE key of project environment
 ```http
-DELETE http://localhost:8080/projectName/projectType/env/VAR_FIVE
+DELETE http://localhost:8080/projects/projectName/projectType/env/VAR_FIVE
 Accept: */*
 Cache-Control: no-cache
 

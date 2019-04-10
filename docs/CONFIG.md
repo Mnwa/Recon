@@ -2,7 +2,7 @@
 
 ## Create project environment
 ```http
-PUT http://localhost:8080/projectName/projectType/config
+PUT http://localhost:8080/projects/projectName/projectType/config
 Accept: */*
 Cache-Control: no-cache
 Content-Type: text/plain
@@ -17,7 +17,7 @@ var_two=2
 ```
 ## Add key to project environment
 ```http
-PUT http://localhost:8080/projectName/projectType/config/var_three
+PUT http://localhost:8080/projects/projectName/projectType/config/var_three
 Accept: */*
 Cache-Control: no-cache
 Content-Type: text/plain
@@ -31,7 +31,7 @@ Content-Type: text/plain
 
 ## Update project environment
 ```http
-POST http://localhost:8080/projectName/projectType/config
+POST http://localhost:8080/projects/projectName/projectType/config
 Accept: */*
 Cache-Control: no-cache
 Content-Type: text/plain
@@ -49,7 +49,7 @@ var_five=5
 ```
 ## Update key of project environment
 ```http
-POST http://localhost:8080/projectName/projectType/config/var_five
+POST http://localhost:8080/projects/projectName/projectType/config/var_five
 Accept: */*
 Cache-Control: no-cache
 Content-Type: text/plain
@@ -63,7 +63,7 @@ Content-Type: text/plain
 
 ## Get project environment
 ```http
-GET http://localhost:8080/projectName/projectType/config
+GET http://localhost:8080/projects/projectName/projectType/config
 Accept: */*
 Cache-Control: no-cache
 
@@ -77,7 +77,7 @@ var_five=10
 ```
 ## Get key of project environment
 ```http
-GET http://localhost:8080/projectName/projectType/config/var_five
+GET http://localhost:8080/projects/projectName/projectType/config/var_five
 Accept: */*
 Cache-Control: no-cache
 
@@ -88,7 +88,7 @@ Cache-Control: no-cache
 
 ## DELETE project environment
 ```http
-DELETE http://localhost:8080/projectName/projectType/config
+DELETE http://localhost:8080/projects/projectName/projectType/config
 Accept: */*
 Cache-Control: no-cache
 
@@ -98,7 +98,7 @@ Deleted
 ```
 ## DELETE key of project environment
 ```http
-DELETE http://localhost:8080/projectName/projectType/config/var_five
+DELETE http://localhost:8080/projects/projectName/projectType/config/var_five
 Accept: */*
 Cache-Control: no-cache
 
