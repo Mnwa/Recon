@@ -17,6 +17,11 @@ Install dependencies:
 ```bash
 dep ensure
 ```
+
+Run tests:
+```bash
+go test
+```
 Compile sources:
 ```bash
 go build -o ./build/service
