@@ -49,6 +49,7 @@ func (r *Replication) Transmit() {
 				req := fasthttp.AcquireRequest()
 				req.SetRequestURI("/replication/receiver")
 				req.Header.SetMethod("POST")
+				req.Header.SetContentType("application/protobuf")
 				req.SetBody(body)
 				resp := fasthttp.AcquireResponse()
 
