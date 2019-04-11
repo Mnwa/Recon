@@ -5,9 +5,7 @@
 [![GitHub license](https://img.shields.io/github/license/Mnwa/Recon.svg)](https://github.com/Mnwa/Recon)
 [![Repository Size](https://img.shields.io/github/repo-size/Mnwa/Recon.svg)](https://github.com/Mnwa/Recon)
 
-LDAP based key/value store with env support
-
-Now it have only env data support
+HA LDAP based key/value store with env support with multi master replication support
 
 # Run
 Recon it's simple golang app and it's requirements only [go](https://golang.org/) and [dep](https://github.com/golang/dep)
@@ -79,6 +77,7 @@ with `:projectType` merge priority
 * [Environment usage](./docs/ENV.md)
 * [Make backups](./docs/BACKUPS.md)
 * [Prometheus metrics](./docs/PROMETHEUS.md)
+* [Replication](./docs/REPLICATION.md)
 
 # Thanks for community! 🎉 🎉 🎉 🎉
 Recon required that's packages:
