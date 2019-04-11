@@ -56,6 +56,8 @@ For saving data you need create volume from ```/var/lib/recon``` to you system
 Recon can be configured with environment:
 * `RECON_DB_DIR` default is `/var/lib/recon`
 * `RECON_ADDR` default is `:8080`
+* `RECON_REPLICATION_INIT` will be restore backup from other masters if not set `off`. Default is `nil`
+* `RECON_REPLICATION_HOSTS` hosts of others masters in replication separated by comma (`localhost:8081,localhost:443`) default is `nil`
 
 # Recon usage
 

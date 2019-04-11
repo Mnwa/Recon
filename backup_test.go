@@ -22,9 +22,6 @@ func TestBackup(t *testing.T) {
 	if err != nil {
 		t.Error(err)
 	}
-	if len(data) == 0 {
-		t.Error("Backup must not be empty")
-	}
 
 	err = backup.RestoreBackup(data)
 	if err != nil {

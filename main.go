@@ -3,36 +3,26 @@ package main
 import (
 	"Recon/controllers"
 	"Recon/database"
-	"github.com/prologic/bitcask"
-	"log"
-	"os"
-
 	"github.com/buaazp/fasthttprouter"
 	fastp "github.com/flf2ko/fasthttp-prometheus"
 	"github.com/valyala/fasthttp"
+	"log"
+	"os"
 )
 
 func main() {
-	var err error
-	dbDir := os.Getenv("RECON_DB_DIR")
-	if dbDir == "" {
-		dbDir = "/var/lib/recon"
-	}
-
 	addr := os.Getenv("RECON_ADDR")
 	if addr == "" {
 		addr = ":8080"
 	}
 
-	database.Client, err = bitcask.Open(dbDir)
-	if err != nil {
-		log.Fatal(err)
-	}
 	defer database.Client.Close()
 	router := fasthttprouter.New()
 
 	router.GET("/backup", controllers.GetBackup)
 	router.POST("/backup", controllers.RestoreBackup)
+
+	router.POST("/replication/receiver", controllers.RecieveMessagesReplication)
 
 	// Env based
 	router.GET("/projects/:project/:type/env", controllers.GetEnv)
