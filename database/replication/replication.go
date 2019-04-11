@@ -2,28 +2,15 @@ package replication
 
 import (
 	"Recon/database"
-	"encoding/json"
+	"github.com/gogo/protobuf/proto"
 	"github.com/valyala/fasthttp"
 	"log"
 	"time"
 )
 
-type Message struct {
-	Timestamp int64             `json:"timestamp"`
-	Data      map[string][]byte `json:"data"`
-}
-
-func (m *Message) Keys() []string {
-	var keys []string
-	for key := range m.Data {
-		keys = append(keys, key)
-	}
-	return keys
-}
-
 type Replication struct {
-	Transmitter chan Message
-	Receiver    chan Message
+	Transmitter chan Transaction
+	Receiver    chan Transaction
 
 	Received map[string]int64
 
@@ -31,12 +18,12 @@ type Replication struct {
 }
 
 func (r *Replication) Receive() {
-	var message Message
+	var transaction Transaction
 	for {
-		message = <-r.Receiver
+		transaction = <-r.Receiver
 
-		for key, data := range message.Data {
-			if timestamp, ok := r.Received[key]; ok && timestamp <= message.Timestamp {
+		for key, data := range transaction.Data {
+			if timestamp, ok := r.Received[key]; ok && timestamp <= transaction.Timestamp {
 				continue
 			}
 
@@ -44,16 +31,18 @@ func (r *Replication) Receive() {
 
 			if err != nil {
 				log.Println(err)
+			} else {
+				r.Received[key] = transaction.Timestamp
 			}
 		}
 	}
 }
 
 func (r *Replication) Transmit() {
-	var message Message
+	var transaction Transaction
 	for {
-		message = <-r.Transmitter
-		body, err := json.Marshal(message)
+		transaction = <-r.Transmitter
+		body, err := proto.Marshal(&transaction)
 
 		if err == nil {
 			for _, host := range r.Replicas {
@@ -77,7 +66,7 @@ func (r *Replication) Transmit() {
 
 func (r *Replication) SendMessage(data map[string][]byte) {
 	if len(r.Replicas) > 0 {
-		r.Transmitter <- NewMessage(data)
+		r.Transmitter <- NewTransaction(data)
 	}
 }
 
@@ -89,15 +78,15 @@ func NewReplication(replications []string) *Replication {
 		})
 	}
 	return &Replication{
-		Transmitter: make(chan Message, 32),
-		Receiver:    make(chan Message),
+		Transmitter: make(chan Transaction, 32),
+		Receiver:    make(chan Transaction),
 		Received:    make(map[string]int64),
 		Replicas:    hosts,
 	}
 }
 
-func NewMessage(data map[string][]byte) Message {
-	return Message{
+func NewTransaction(data map[string][]byte) Transaction {
+	return Transaction{
 		Timestamp: time.Now().UnixNano(),
 		Data:      data,
 	}

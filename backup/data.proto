@@ -1,0 +1,6 @@
+syntax = "proto3";
+package backup;
+
+message Backup {
+    map<string, bytes> data = 1;
+}

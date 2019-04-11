@@ -1,0 +1,7 @@
+syntax = "proto3";
+package replication;
+
+message Transaction {
+    int64 timestamp = 1;
+    map<string, bytes> data = 2;
+}

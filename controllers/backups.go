@@ -8,8 +8,12 @@ import (
 func GetBackup(ctx *fasthttp.RequestCtx) {
 	data, err := backup.CreateBackup()
 	if err == nil {
-		ctx.SetContentType("application/json")
-		ctx.SetBody(data)
+		ctx.SetContentType("application/protobuf")
+		if ctx.Request.Header.HasAcceptEncoding("gzip") {
+			ctx.SetBody(fasthttp.AppendGzipBytes(nil, data))
+		} else {
+			ctx.SetBody(data)
+		}
 	} else {
 		ctx.SetStatusCode(fasthttp.StatusBadRequest)
 		ctx.SetBodyString(err.Error())
