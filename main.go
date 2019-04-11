@@ -3,13 +3,14 @@ package main
 import (
 	"Recon/controllers"
 	"Recon/database"
-	"github.com/prologic/bitcask"
-	"log"
-	"os"
-
+	"Recon/database/replication"
 	"github.com/buaazp/fasthttprouter"
 	fastp "github.com/flf2ko/fasthttp-prometheus"
+	"github.com/prologic/bitcask"
 	"github.com/valyala/fasthttp"
+	"log"
+	"os"
+	"strings"
 )
 
 func main() {
@@ -28,11 +29,22 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
+
 	defer database.Client.Close()
 	router := fasthttprouter.New()
 
+	replicationHosts := strings.Split(os.Getenv("RECON_REPLICATION_HOSTS"), ",")
+	replication.Replica = replication.NewReplication(replicationHosts)
+	go replication.Replica.Receive()
+
+	if len(replicationHosts) > 0 {
+		go replication.Replica.Transmit()
+	}
+
 	router.GET("/backup", controllers.GetBackup)
 	router.POST("/backup", controllers.RestoreBackup)
+
+	router.POST("/replication/receiver", controllers.RecieveMessagesReplication)
 
 	// Env based
 	router.GET("/projects/:project/:type/env", controllers.GetEnv)
