@@ -1,4 +1,5 @@
 # Simple example of environment usage
+Recon backups worked on protobuf standards and must be download/restored as binary file
 
 ## Get backup data
 ```http
@@ -8,27 +9,16 @@ Cache-Control: no-cache
 
 ###
 
-{
-  "projectName/default/var_six": "3",
-  "projectName/projectType/var_four": "4",
-  "projectName/projectType/var_one": "3",
-  "projectName/projectType/var_three": "3",
-  "projectName/projectType/var_two": "1"
-}
+***BACKUP DATA***
 ```
 ## Get key of project environment
 ```http
 POST http://localhost:8080/backup
 Accept: */*
 Cache-Control: no-cache
+Content-Type: application/protobuf
 
-{
-  "projectName/default/var_six": "3",
-  "projectName/projectType/var_four": "4",
-  "projectName/projectType/var_one": "3",
-  "projectName/projectType/var_three": "3",
-  "projectName/projectType/var_two": "1"
-}
+***BACKUP DATA***
 
 ###
 
