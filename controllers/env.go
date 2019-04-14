@@ -83,7 +83,12 @@ func GetEnv(ctx *fasthttp.RequestCtx) {
 	projectType := ctx.UserValue("type").(string)
 	body, err := adapter.Get(project, projectType)
 	if err == nil {
-		ctx.SetBody(body)
+		if ctx.Request.Header.HasAcceptEncoding("gzip") {
+			ctx.Response.Header.Add("Content-Encoding", "gzip")
+			ctx.SetBody(fasthttp.AppendGzipBytes(nil, body))
+		} else {
+			ctx.SetBody(body)
+		}
 	} else {
 		ctx.SetStatusCode(fasthttp.StatusBadRequest)
 		ctx.SetBodyString(err.Error())

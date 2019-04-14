@@ -12,7 +12,7 @@ func init() {
 	var err error
 	dbDir := os.Getenv("RECON_DB_DIR")
 	if dbDir == "" {
-		dbDir = "/var/lib/recon"
+		dbDir = "/tmp/test_recon"
 	}
 
 	Client, err = bitcask.Open(dbDir)

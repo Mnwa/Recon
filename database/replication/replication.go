@@ -45,6 +45,9 @@ func (r *Replication) Transmit() {
 	var transaction Transaction
 	for {
 		transaction = <-r.Transmitter
+		if len(r.Replicas) == 0 {
+			continue
+		}
 		body, err := proto.Marshal(&transaction)
 
 		if err == nil {
@@ -102,7 +105,7 @@ func init() {
 	Replica = NewReplication(replicationHosts)
 	go Replica.Receive()
 
-	if len(replicationHosts) > 0 {
+	if os.Getenv("RECON_REPLICATION_HOSTS") != "" && len(replicationHosts) > 0 {
 		go Replica.Transmit()
 
 		if os.Getenv("RECON_REPLICATION_INIT") != "off" {

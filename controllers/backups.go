@@ -10,6 +10,7 @@ func GetBackup(ctx *fasthttp.RequestCtx) {
 	if err == nil {
 		ctx.SetContentType("application/protobuf")
 		if ctx.Request.Header.HasAcceptEncoding("gzip") {
+			ctx.Response.Header.Add("Content-Encoding", "gzip")
 			ctx.SetBody(fasthttp.AppendGzipBytes(nil, data))
 		} else {
 			ctx.SetBody(data)
