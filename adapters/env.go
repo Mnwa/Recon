@@ -93,8 +93,7 @@ func (e *Env) UpdateKey(project string, projectType string, key string, data []b
 func (e *Env) Get(project string, projectType string) ([]byte, error) {
 	var data = ""
 	if projectType != "default" {
-		defaultData, err := e.Get(project, "default")
-		data = string(defaultData)
+		_, err := e.Get(project, "default")
 
 		if err != nil {
 			return nil, err
@@ -104,12 +103,18 @@ func (e *Env) Get(project string, projectType string) ([]byte, error) {
 	err := database.Client.Scan(storageKey, func(key string) error {
 		if database.Client.Has(key) {
 			value, err := database.Client.Get(key)
-			data += strings.ToUpper(strings.ReplaceAll(key, storageKey, "")) + "=" + string(value) + "\n"
+			if err == nil {
+				e.data[strings.ToUpper(strings.ReplaceAll(key, storageKey, ""))] = value
+			}
 			return err
 		} else {
 			return nil
 		}
 	})
+
+	for key, value := range e.data {
+		data += key + "=" + string(value) + "\n"
+	}
 	return []byte(data), err
 }
 
