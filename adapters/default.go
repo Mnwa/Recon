@@ -15,9 +15,9 @@ type Default struct {
 func (e *Default) parseDefault(data []byte) {
 	for _, val := range strings.Split(string(data), "\n") {
 		if val != "" {
-			row := strings.Split(val, "=")
+			row := strings.SplitN(val, "=", 2)
 			if len(row) == 2 {
-				e.data[row[0]] = []byte(row[1])
+				e.data[strings.TrimSpace(row[0])] = []byte(strings.TrimSpace(row[1]))
 			}
 		}
 	}
