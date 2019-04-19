@@ -2,12 +2,12 @@
 
 
 [[projects]]
-  branch = "master"
   digest = "1:d6afaeed1502aa28e80a4ed0981d570ad91b2579193404256ce672ed0a609e0d"
   name = "github.com/beorn7/perks"
   packages = ["quantile"]
   pruneopts = "UT"
-  revision = "3a771d992973f24aa725d07868b467d1ddfceafb"
+  revision = "4b2b341e8d7715fae06375aa633dbb6e91b3fb46"
+  version = "v1.0.0"
 
 [[projects]]
   digest = "1:652880afc6b57ce0a67173f552cb35ccda816493a1da6ca20e5074a66bcd083f"
@@ -135,16 +135,16 @@
     "model",
   ]
   pruneopts = "UT"
-  revision = "cfeb6f9992ffa54aaa4f2170ade4067ee478b250"
-  version = "v0.2.0"
+  revision = "a82f4c12f983cc2649298185f296632953e50d3e"
+  version = "v0.3.0"
 
 [[projects]]
   branch = "master"
-  digest = "1:f806b417865e83457c3659232926203f5b0d39aa741b71d9e3e4c0c774e71a5c"
+  digest = "1:49b09905e781d7775c086604cc00083e1832d0783f1f421b79f42657c457d029"
   name = "github.com/prometheus/procfs"
   packages = ["."]
   pruneopts = "UT"
-  revision = "ea9eea63887261e4d8ed8315f4078e88d540c725"
+  revision = "8368d24ba045f26503eb745b624d930cbe214c79"
 
 [[projects]]
   digest = "1:c468422f334a6b46a19448ad59aaffdfc0a36b08fdcc1c749a0b29b6453d7e59"
@@ -173,7 +173,7 @@
   name = "golang.org/x/exp"
   packages = ["mmap"]
   pruneopts = "UT"
-  revision = "56b785ea58b286fc6c055da6155916719832a3a2"
+  revision = "694a7e2fcf6945015c6b598fdb20f746b7766402"
 
 [solve-meta]
   analyzer-name = "dep"
@@ -181,6 +181,8 @@
   input-imports = [
     "github.com/buaazp/fasthttprouter",
     "github.com/flf2ko/fasthttp-prometheus",
+    "github.com/gogo/protobuf/proto",
+    "github.com/golang/protobuf/proto",
     "github.com/prologic/bitcask",
     "github.com/valyala/fasthttp",
   ]
