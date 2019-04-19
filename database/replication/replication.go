@@ -8,67 +8,90 @@ import (
 	"log"
 	"os"
 	"strings"
+	"sync"
 	"time"
 )
 
 type Replication struct {
-	Transmitter chan Transaction
-	Receiver    chan Transaction
+	Transmitter chan *Transaction
+	Receiver    chan *Transaction
 
 	Received map[string]int64
 
 	Replicas map[string]*fasthttp.HostClient
 }
 
+var transactionPool = sync.Pool{
+	New: func() interface{} {
+		return new(Transaction)
+	},
+}
+
+func GetTransaction() *Transaction {
+	return transactionPool.Get().(*Transaction)
+}
+
+func PutTransaction(transaction *Transaction) {
+	transaction.Reset()
+	transactionPool.Put(transaction)
+}
+
 func (r *Replication) Receive() {
-	var transaction Transaction
 	for {
-		transaction = <-r.Receiver
+		transaction := <-r.Receiver
 
-		for key, data := range transaction.Data {
-			if timestamp, ok := r.Received[key]; ok && timestamp <= transaction.Timestamp {
-				continue
+		go func() {
+			for key, data := range transaction.Data {
+				if timestamp, ok := r.Received[key]; ok && timestamp <= transaction.Timestamp {
+					continue
+				}
+
+				err := database.Client.Put(key, data)
+
+				if err == nil {
+					r.Received[key] = transaction.Timestamp
+				} else {
+					log.Println("Replication error:", err)
+				}
 			}
 
-			err := database.Client.Put(key, data)
-
-			if err == nil {
-				r.Received[key] = transaction.Timestamp
-			} else {
-				log.Println("Replication error:", err)
-			}
-		}
+			PutTransaction(transaction)
+		}()
 	}
 }
 
 func (r *Replication) Transmit() {
-	var transaction Transaction
 	for {
-		transaction = <-r.Transmitter
+		transaction := <-r.Transmitter
+
 		if len(r.Replicas) == 0 {
 			continue
 		}
-		body, err := proto.Marshal(&transaction)
+		go func() {
+			body, err := proto.Marshal(transaction)
 
-		if err == nil {
-			for addr, host := range r.Replicas {
-				req := fasthttp.AcquireRequest()
-				req.SetRequestURI("/replication/receiver")
-				req.Header.SetMethod("POST")
-				req.Header.SetHost(addr)
-				req.Header.SetContentType("application/protobuf")
-				req.SetBody(body)
-				resp := fasthttp.AcquireResponse()
+			if err == nil {
+				for addr, host := range r.Replicas {
+					req := fasthttp.AcquireRequest()
+					req.SetRequestURI("/replication/receiver")
+					req.Header.SetMethod("POST")
+					req.Header.SetHost(addr)
+					req.Header.SetContentType("application/protobuf")
+					req.SetBody(body)
+					resp := fasthttp.AcquireResponse()
 
-				err := host.Do(req, resp)
+					err := host.Do(req, resp)
 
-				if err != nil {
-					log.Println("Master", addr, "is down:", err)
+					if err != nil {
+						log.Println("Master", addr, "is down:", err)
+					}
 				}
+			} else {
+				log.Println("Replication error:", err)
 			}
-		} else {
-			log.Println("Replication error:", err)
-		}
+
+			PutTransaction(transaction)
+		}()
 	}
 }
 
@@ -86,18 +109,18 @@ func NewReplication(replications []string) *Replication {
 		}
 	}
 	return &Replication{
-		Transmitter: make(chan Transaction, 128),
-		Receiver:    make(chan Transaction, len(replications)*128),
+		Transmitter: make(chan *Transaction, 2048),
+		Receiver:    make(chan *Transaction, 2048),
 		Received:    make(map[string]int64),
 		Replicas:    hosts,
 	}
 }
 
-func NewTransaction(data map[string][]byte) Transaction {
-	return Transaction{
-		Timestamp: time.Now().UnixNano(),
-		Data:      data,
-	}
+func NewTransaction(data map[string][]byte) *Transaction {
+	transaction := GetTransaction()
+	transaction.Timestamp = time.Now().UnixNano()
+	transaction.Data = data
+	return transaction
 }
 
 func init() {

@@ -8,8 +8,8 @@ import (
 )
 
 func RecieveMessagesReplication(ctx *fasthttp.RequestCtx) {
-	var transaction replication.Transaction
-	err := proto.Unmarshal(ctx.PostBody(), &transaction)
+	transaction := replication.GetTransaction()
+	err := proto.Unmarshal(ctx.PostBody(), transaction)
 	if err == nil {
 		replication.Replica.Receiver <- transaction
 	} else {
