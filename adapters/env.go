@@ -3,7 +3,6 @@ package adapters
 import (
 	"Recon/database"
 	"Recon/database/replication"
-	"bytes"
 	"errors"
 	"strings"
 	"sync"
@@ -123,7 +122,7 @@ func (e *Env) Get(project string, projectType string) ([]byte, error) {
 func (e *Env) GetKey(project string, projectType string, key string) ([]byte, error) {
 	storageKey := strings.ToLower(project + "/" + projectType + "/" + key)
 	value, err := database.Client.Get(storageKey)
-	return bytes.ToUpper(value), err
+	return value, err
 }
 
 func (e *Env) Delete(project string, projectType string) error {
