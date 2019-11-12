@@ -8,6 +8,7 @@ import (
 	"github.com/valyala/fasthttp"
 	"log"
 	"os"
+	"time"
 )
 
 func main() {
@@ -16,7 +17,35 @@ func main() {
 		addr = ":8080"
 	}
 
-	defer database.Client.Close()
+	go func() {
+		// save data to disk every second
+		for {
+			if database.Client.Len() > 0 {
+				log.Println("Save data to partitions")
+				err := database.Client.Sync()
+				if err != nil {
+					log.Fatal(err)
+				}
+			}
+			time.Sleep(time.Second)
+		}
+	}()
+
+	go func() {
+		// run merge sort every hour
+		for {
+			if database.Client.SsTable().Len() > 2 {
+				log.Println("Merging partitions..")
+				err := database.Client.SsTable().MergeSort()
+				if err != nil {
+					log.Fatal(err)
+				}
+			}
+			time.Sleep(time.Hour)
+		}
+	}()
+
+	defer database.Client.Sync()
 	router := fasthttprouter.New()
 
 	router.GET("/backup", controllers.GetBackup)

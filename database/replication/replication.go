@@ -46,13 +46,9 @@ func (r *Replication) Receive() {
 					continue
 				}
 
-				err := database.Client.Put(key, data)
+				database.Client.Set(key, data)
 
-				if err == nil {
-					r.Received[key] = transaction.Timestamp
-				} else {
-					log.Println("Replication error:", err)
-				}
+				r.Received[key] = transaction.Timestamp
 			}
 
 			PutTransaction(transaction)

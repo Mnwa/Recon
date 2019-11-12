@@ -9,20 +9,11 @@ func CreateBackup() ([]byte, error) {
 	var backup = &Backup{
 		Data: make(map[string][]byte),
 	}
-	err := database.Client.Fold(func(key string) error {
-		if database.Client.Has(key) {
-			value, err := database.Client.Get(key)
-			backup.Data[key] = value
-			return err
-		} else {
-			return nil
-		}
+	database.Client.Scan("", func(key string, value []byte) bool {
+		backup.Data[key] = value
+		return true
 	})
-	if err == nil {
-		return proto.Marshal(backup)
-	} else {
-		return nil, err
-	}
+	return proto.Marshal(backup)
 }
 
 func RestoreBackup(body []byte) error {
@@ -30,10 +21,7 @@ func RestoreBackup(body []byte) error {
 	err := proto.Unmarshal(body, &backup)
 	if err == nil {
 		for key, value := range backup.GetData() {
-			err = database.Client.Put(key, value)
-			if err != nil {
-				return err
-			}
+			database.Client.Set(key, value)
 		}
 		return nil
 	} else {

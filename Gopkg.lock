@@ -2,6 +2,14 @@
 
 
 [[projects]]
+  digest = "1:ca73e5aed7c9e5d1b6ddb2f1f0ddab2461140afaaf596077d1b79c19425daeab"
+  name = "github.com/Mnwa/ReconEngine"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "833eee288f0bcabf45e7d349b037a55017a5f286"
+  version = "2.1.5"
+
+[[projects]]
   digest = "1:d6afaeed1502aa28e80a4ed0981d570ad91b2579193404256ce672ed0a609e0d"
   name = "github.com/beorn7/perks"
   packages = ["quantile"]
@@ -24,14 +32,6 @@
   packages = ["."]
   pruneopts = "UT"
   revision = "aa96d38e11cfed45678a5e1204091bc09f99b8fc"
-
-[[projects]]
-  digest = "1:d7b2d6ad2a9768bb5c9e3bfa4d9ceaa635ca2737cca288507986f116fa4b8da2"
-  name = "github.com/gofrs/flock"
-  packages = ["."]
-  pruneopts = "UT"
-  revision = "392e7fae8f1b0bdbd67dad7237d23f618feb6dbb"
-  version = "v0.7.1"
 
 [[projects]]
   digest = "1:48092bf6632f55839850666c33469f546f6d45fdbd59a66759ec12e84d853dc2"
@@ -76,35 +76,6 @@
   pruneopts = "UT"
   revision = "c12348ce28de40eed0136aa2b644d0ee0650e56c"
   version = "v1.0.1"
-
-[[projects]]
-  digest = "1:cf31692c14422fa27c83a05292eb5cbe0fb2775972e8f1f8446a71549bd8980b"
-  name = "github.com/pkg/errors"
-  packages = ["."]
-  pruneopts = "UT"
-  revision = "ba968bfe8b2f7e042a574c888954fccecfa385b4"
-  version = "v0.8.1"
-
-[[projects]]
-  digest = "1:07769ae7e77865f3dcf40f6fd61f79770471d204623548a256818cd562ce47fa"
-  name = "github.com/prologic/bitcask"
-  packages = [
-    ".",
-    "internal",
-    "internal/proto",
-    "internal/streampb",
-  ]
-  pruneopts = "UT"
-  revision = "b6c9867e7b8d7b7cd4f865a51a5084e62774f49e"
-  version = "v0.1.6"
-
-[[projects]]
-  branch = "master"
-  digest = "1:4333849538d7dd266a44ae024a4533b6f24014451f7b308cd4c99106b0742aac"
-  name = "github.com/prologic/trie"
-  packages = ["."]
-  pruneopts = "UT"
-  revision = "3972df81f9b588faa8d3c84f835ec95f13a50836"
 
 [[projects]]
   digest = "1:93a746f1060a8acbcf69344862b2ceced80f854170e1caae089b2834c5fbf7f4"
@@ -167,23 +138,15 @@
   revision = "e5f51c11919d4f66400334047b897ef0a94c6f3c"
   version = "v20180529"
 
-[[projects]]
-  branch = "master"
-  digest = "1:feece64517a25b2ffe2a82f2df04255b9914ce3fbfd5263fce681479510990c1"
-  name = "golang.org/x/exp"
-  packages = ["mmap"]
-  pruneopts = "UT"
-  revision = "694a7e2fcf6945015c6b598fdb20f746b7766402"
-
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
   input-imports = [
+    "github.com/Mnwa/ReconEngine",
     "github.com/buaazp/fasthttprouter",
     "github.com/flf2ko/fasthttp-prometheus",
     "github.com/gogo/protobuf/proto",
     "github.com/golang/protobuf/proto",
-    "github.com/prologic/bitcask",
     "github.com/valyala/fasthttp",
   ]
   solver-name = "gps-cdcl"

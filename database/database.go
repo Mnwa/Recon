@@ -1,22 +1,20 @@
 package database
 
 import (
-	"github.com/prologic/bitcask"
-	"log"
+	"github.com/Mnwa/ReconEngine"
 	"os"
 )
 
-var Client *bitcask.Bitcask
+var Client reconEngine.MemStorage
 
 func init() {
-	var err error
 	dbDir := os.Getenv("RECON_DB_DIR")
 	if dbDir == "" {
 		dbDir = "/tmp/test_recon"
 	}
+	_ = os.Mkdir(dbDir, 0750)
 
-	Client, err = bitcask.Open(dbDir)
-	if err != nil {
-		log.Fatal(err)
-	}
+	reconEngine.BinDir = dbDir
+
+	Client = reconEngine.NewMem(nil)
 }

@@ -3,7 +3,9 @@ package adapters
 import (
 	"Recon/database"
 	"Recon/database/replication"
+	"bytes"
 	"errors"
+	"log"
 	"strings"
 	"sync"
 )
@@ -30,11 +32,7 @@ func (e *Default) Create(project string, projectType string, data []byte) error 
 	e.parseDefault(data)
 	for key, value := range e.data {
 		storageKey := strings.ToLower(project + "/" + projectType + "/" + key)
-		err = database.Client.Put(storageKey, value)
-
-		if err != nil {
-			break
-		}
+		database.Client.Set(storageKey, value)
 		replicationData[storageKey] = value
 	}
 	go replication.Replica.SendMessage(replicationData)
@@ -46,14 +44,12 @@ func (e *Default) CreateKey(project string, projectType string, key string, data
 	replicationData := make(map[string][]byte)
 	storageKey := strings.ToLower(project + "/" + projectType + "/" + key)
 
-	err := database.Client.Put(storageKey, data)
+	database.Client.Set(storageKey, data)
 
-	if err == nil {
-		replicationData[storageKey] = data
-		go replication.Replica.SendMessage(replicationData)
-	}
+	replicationData[storageKey] = data
+	go replication.Replica.SendMessage(replicationData)
 
-	return err
+	return nil
 }
 
 func (e *Default) Update(project string, projectType string, data []byte) error {
@@ -63,11 +59,8 @@ func (e *Default) Update(project string, projectType string, data []byte) error 
 	e.parseDefault(data)
 	for key, value := range e.data {
 		storageKey := strings.ToLower(project + "/" + projectType + "/" + key)
-		err = database.Client.Put(storageKey, value)
+		database.Client.Set(storageKey, value)
 
-		if err != nil {
-			break
-		}
 		replicationData[storageKey] = value
 	}
 	go replication.Replica.SendMessage(replicationData)
@@ -78,14 +71,13 @@ func (e *Default) Update(project string, projectType string, data []byte) error 
 func (e *Default) UpdateKey(project string, projectType string, key string, data []byte) error {
 	replicationData := make(map[string][]byte)
 	storageKey := strings.ToLower(project + "/" + projectType + "/" + key)
+	_, err := database.Client.Get(storageKey)
 
-	if database.Client.Has(storageKey) {
-		err := database.Client.Put(storageKey, data)
+	if err == nil {
+		database.Client.Set(storageKey, data)
 
-		if err == nil {
-			replicationData[storageKey] = data
-			go replication.Replica.SendMessage(replicationData)
-		}
+		replicationData[storageKey] = data
+		go replication.Replica.SendMessage(replicationData)
 
 		return err
 	} else {
@@ -103,22 +95,18 @@ func (e *Default) Get(project string, projectType string) ([]byte, error) {
 		}
 	}
 	storageKey := strings.ToLower(project + "/" + projectType + "/")
-	err := database.Client.Scan(storageKey, func(key string) error {
-		if database.Client.Has(key) {
-			value, err := database.Client.Get(key)
-			if err == nil {
-				e.data[strings.ReplaceAll(key, storageKey, "")] = value
-			}
-			return err
-		} else {
-			return nil
+	database.Client.Scan(storageKey, func(key string, value []byte) bool {
+		// 0x04 byte is removed val
+		if !bytes.Equal(value, []byte{0x04}) {
+			e.data[strings.ToUpper(strings.ReplaceAll(key, storageKey, ""))] = value
 		}
+		return true
 	})
 
 	for key, value := range e.data {
 		data += key + "=" + string(value) + "\n"
 	}
-	return []byte(data), err
+	return []byte(data), nil
 }
 
 func (e *Default) GetKey(project string, projectType string, key string) ([]byte, error) {
@@ -131,26 +119,24 @@ func (e *Default) Delete(project string, projectType string) error {
 	replicationData := make(map[string][]byte)
 
 	storageKey := strings.ToLower(project + "/" + projectType + "/")
-	err := database.Client.Scan(storageKey, func(key string) error {
-		if database.Client.Has(key) {
-			err := database.Client.Delete(key)
-			if err == nil {
-				replicationData[storageKey] = nil
-				go replication.Replica.SendMessage(replicationData)
-			}
-
-			return err
-		} else {
-			return nil
+	database.Client.Scan(storageKey, func(key string, value []byte) bool {
+		err := database.Client.Del(key)
+		if err == nil {
+			replicationData[storageKey] = nil
+			go replication.Replica.SendMessage(replicationData)
+			log.Println(err)
+			return true
 		}
+
+		return false
 	})
-	return err
+	return nil
 }
 
 func (e *Default) DeleteKey(project string, projectType string, key string) error {
 	replicationData := make(map[string][]byte)
 	storageKey := strings.ToLower(project + "/" + projectType + "/" + key)
-	err := database.Client.Delete(storageKey)
+	err := database.Client.Del(storageKey)
 
 	if err == nil {
 		replicationData[storageKey] = nil

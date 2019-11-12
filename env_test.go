@@ -2,6 +2,7 @@ package main_test
 
 import (
 	"Recon/adapters"
+	"Recon/database"
 	"testing"
 )
 
@@ -11,6 +12,9 @@ func TestEnvCreate(t *testing.T) {
 	if err != nil {
 		t.Error(err)
 	}
+	if database.Client.Len() == 0 {
+		t.Error("Not created")
+	}
 }
 
 func TestEnvCreateKey(t *testing.T) {
@@ -18,6 +22,9 @@ func TestEnvCreateKey(t *testing.T) {
 	err := adapter.CreateKey("testProject", "testType", "VAR_TEST_TWO", []byte("2"))
 	if err != nil {
 		t.Error(err)
+	}
+	if database.Client.Len() == 0 {
+		t.Error("Not created key")
 	}
 }
 
@@ -27,6 +34,9 @@ func TestEnvUpdate(t *testing.T) {
 	if err != nil {
 		t.Error(err)
 	}
+	if database.Client.Len() == 0 {
+		t.Error("Not updated")
+	}
 }
 
 func TestEnvUpdateKey(t *testing.T) {
@@ -34,6 +44,9 @@ func TestEnvUpdateKey(t *testing.T) {
 	err := adapter.UpdateKey("testProject", "testType", "VAR_TEST_TWO", []byte("3"))
 	if err != nil {
 		t.Error(err)
+	}
+	if database.Client.Len() == 0 {
+		t.Error("Not updated key")
 	}
 }
 
