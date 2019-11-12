@@ -10,6 +10,14 @@
   version = "2.1.5"
 
 [[projects]]
+  digest = "1:ba1ec6376854b9bb09599c6e82e6dcf09786a065a136107a7ee6404b0d912bcb"
+  name = "github.com/Mnwa/fasthttprouter-prometheus"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "a12d40b15b9e9a9c3b66255b77cc8896984a6843"
+  version = "1.1"
+
+[[projects]]
   digest = "1:d6afaeed1502aa28e80a4ed0981d570ad91b2579193404256ce672ed0a609e0d"
   name = "github.com/beorn7/perks"
   packages = ["quantile"]
@@ -18,20 +26,12 @@
   version = "v1.0.0"
 
 [[projects]]
-  digest = "1:652880afc6b57ce0a67173f552cb35ccda816493a1da6ca20e5074a66bcd083f"
-  name = "github.com/buaazp/fasthttprouter"
+  digest = "1:44ff126fcae7e31342c570efcd7eae3a193d550e7caf99e2aafd402ee3fbc762"
+  name = "github.com/fasthttp/router"
   packages = ["."]
   pruneopts = "UT"
-  revision = "ade4e2031af3aed7fffd241084aad80a58faf421"
-  version = "v0.1.1"
-
-[[projects]]
-  branch = "master"
-  digest = "1:0b208def97407009fc40151824e17d6eb762a3d58690c4c0f92dbcea6580e548"
-  name = "github.com/flf2ko/fasthttp-prometheus"
-  packages = ["."]
-  pruneopts = "UT"
-  revision = "aa96d38e11cfed45678a5e1204091bc09f99b8fc"
+  revision = "ea7c9712bc1944c11785e5d7508f97056e88b72b"
+  version = "v0.5.2"
 
 [[projects]]
   digest = "1:48092bf6632f55839850666c33469f546f6d45fdbd59a66759ec12e84d853dc2"
@@ -118,6 +118,14 @@
   revision = "8368d24ba045f26503eb745b624d930cbe214c79"
 
 [[projects]]
+  branch = "master"
+  digest = "1:8232b87605be15cba8bb9b5089d91a79bb678406aa8b48aaf7b582a104aa5b14"
+  name = "github.com/savsgio/gotils"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "524bc4f475005d9dbedc1bc77248a07aef318ef0"
+
+[[projects]]
   digest = "1:c468422f334a6b46a19448ad59aaffdfc0a36b08fdcc1c749a0b29b6453d7e59"
   name = "github.com/valyala/bytebufferpool"
   packages = ["."]
@@ -126,7 +134,7 @@
   version = "v1.0.0"
 
 [[projects]]
-  digest = "1:d86cac316ca3b1ac9d46e5a249a3aa88305d172b5abd140cecd0216b299364e5"
+  digest = "1:a21ebfebeaecf898c8e071c3cd8244263e752b0ba91378fd39c4a1e570d03732"
   name = "github.com/valyala/fasthttp"
   packages = [
     ".",
@@ -135,16 +143,16 @@
     "stackless",
   ]
   pruneopts = "UT"
-  revision = "e5f51c11919d4f66400334047b897ef0a94c6f3c"
-  version = "v20180529"
+  revision = "4489df89cb8e5101dc1e80a2bc0f1e55b2295e31"
+  version = "v1.6.0"
 
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
   input-imports = [
     "github.com/Mnwa/ReconEngine",
-    "github.com/buaazp/fasthttprouter",
-    "github.com/flf2ko/fasthttp-prometheus",
+    "github.com/Mnwa/fasthttprouter-prometheus",
+    "github.com/fasthttp/router",
     "github.com/gogo/protobuf/proto",
     "github.com/golang/protobuf/proto",
     "github.com/valyala/fasthttp",

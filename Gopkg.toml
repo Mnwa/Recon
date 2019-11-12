@@ -30,17 +30,13 @@
   unused-packages = true
 
 [[constraint]]
-  name = "github.com/buaazp/fasthttprouter"
-  version = "0.1.1"
+  name = "github.com/fasthttp/router"
+  version = "v0.5.2"
 
 [[constraint]]
   name = "github.com/valyala/fasthttp"
-  version = "20180529.0.0"
+  version = "v1.6.0"
 
 [[constraint]]
   name = "github.com/Mnwa/ReconEngine"
   version = "2.1.5"
-
-[[constraint]]
-  branch = "master"
-  name = "github.com/flf2ko/fasthttp-prometheus"

@@ -3,8 +3,8 @@ package main
 import (
 	"Recon/controllers"
 	"Recon/database"
-	"github.com/buaazp/fasthttprouter"
-	fastp "github.com/flf2ko/fasthttp-prometheus"
+	fastp "github.com/Mnwa/fasthttprouter-prometheus"
+	"github.com/fasthttp/router"
 	"github.com/valyala/fasthttp"
 	"log"
 	"os"
@@ -46,38 +46,38 @@ func main() {
 	}()
 
 	defer database.Client.Sync()
-	router := fasthttprouter.New()
+	r := router.New()
 
-	router.GET("/backup", controllers.GetBackup)
-	router.POST("/backup", controllers.RestoreBackup)
+	r.GET("/backup", controllers.GetBackup)
+	r.POST("/backup", controllers.RestoreBackup)
 
-	router.POST("/replication/receiver", controllers.RecieveMessagesReplication)
+	r.POST("/replication/receiver", controllers.RecieveMessagesReplication)
 
 	// Env based
-	router.GET("/projects/:project/:type/env", controllers.GetEnv)
-	router.PUT("/projects/:project/:type/env", controllers.CreateEnv)
-	router.POST("/projects/:project/:type/env", controllers.UpdateEnv)
-	router.DELETE("/projects/:project/:type/env", controllers.DeleteEnv)
+	r.GET("/projects/:project/:type/env", controllers.GetEnv)
+	r.PUT("/projects/:project/:type/env", controllers.CreateEnv)
+	r.POST("/projects/:project/:type/env", controllers.UpdateEnv)
+	r.DELETE("/projects/:project/:type/env", controllers.DeleteEnv)
 
-	router.GET("/projects/:project/:type/env/:key", controllers.GetKeyEnv)
-	router.PUT("/projects/:project/:type/env/:key", controllers.CreateKeyEnv)
-	router.POST("/projects/:project/:type/env/:key", controllers.UpdateKeyEnv)
-	router.DELETE("/projects/:project/:type/env/:key", controllers.DeleteKeyEnv)
+	r.GET("/projects/:project/:type/env/:key", controllers.GetKeyEnv)
+	r.PUT("/projects/:project/:type/env/:key", controllers.CreateKeyEnv)
+	r.POST("/projects/:project/:type/env/:key", controllers.UpdateKeyEnv)
+	r.DELETE("/projects/:project/:type/env/:key", controllers.DeleteKeyEnv)
 
 	// Default kv
-	router.GET("/projects/:project/:type/config", controllers.GetDefault)
-	router.PUT("/projects/:project/:type/config", controllers.CreateDefault)
-	router.POST("/projects/:project/:type/config", controllers.UpdateDefault)
-	router.DELETE("/projects/:project/:type/config", controllers.DeleteDefault)
+	r.GET("/projects/:project/:type/config", controllers.GetDefault)
+	r.PUT("/projects/:project/:type/config", controllers.CreateDefault)
+	r.POST("/projects/:project/:type/config", controllers.UpdateDefault)
+	r.DELETE("/projects/:project/:type/config", controllers.DeleteDefault)
 
-	router.GET("/projects/:project/:type/config/:key", controllers.GetKeyDefault)
-	router.PUT("/projects/:project/:type/config/:key", controllers.CreateKeyDefault)
-	router.POST("/projects/:project/:type/config/:key", controllers.UpdateKeyDefault)
-	router.DELETE("/projects/:project/:type/config/:key", controllers.DeleteKeyDefault)
+	r.GET("/projects/:project/:type/config/:key", controllers.GetKeyDefault)
+	r.PUT("/projects/:project/:type/config/:key", controllers.CreateKeyDefault)
+	r.POST("/projects/:project/:type/config/:key", controllers.UpdateKeyDefault)
+	r.DELETE("/projects/:project/:type/config/:key", controllers.DeleteKeyDefault)
 
 	p := fastp.NewPrometheus("recon")
 	p.MetricsPath = "/"
-	fastpHandler := p.WrapHandler(router)
+	fastpHandler := p.WrapHandler(r)
 
 	log.Println("Recon started")
 
