@@ -7,7 +7,7 @@ import (
 )
 
 func TestEnvCreate(t *testing.T) {
-	var adapter = adapters.GetEnv()
+	var adapter = adapters.NewEnvAdapter()
 	err := adapter.Create("testProject", "testType", []byte("VAR_TEST=1"))
 	if err != nil {
 		t.Error(err)
@@ -18,7 +18,7 @@ func TestEnvCreate(t *testing.T) {
 }
 
 func TestEnvCreateKey(t *testing.T) {
-	var adapter = adapters.GetEnv()
+	var adapter = adapters.NewEnvAdapter()
 	err := adapter.CreateKey("testProject", "testType", "VAR_TEST_TWO", []byte("2"))
 	if err != nil {
 		t.Error(err)
@@ -29,7 +29,7 @@ func TestEnvCreateKey(t *testing.T) {
 }
 
 func TestEnvUpdate(t *testing.T) {
-	var adapter = adapters.GetEnv()
+	var adapter = adapters.NewEnvAdapter()
 	err := adapter.Update("testProject", "testType", []byte("VAR_TEST=2"))
 	if err != nil {
 		t.Error(err)
@@ -40,7 +40,7 @@ func TestEnvUpdate(t *testing.T) {
 }
 
 func TestEnvUpdateKey(t *testing.T) {
-	var adapter = adapters.GetEnv()
+	var adapter = adapters.NewEnvAdapter()
 	err := adapter.UpdateKey("testProject", "testType", "VAR_TEST_TWO", []byte("3"))
 	if err != nil {
 		t.Error(err)
@@ -51,7 +51,7 @@ func TestEnvUpdateKey(t *testing.T) {
 }
 
 func TestEnvGet(t *testing.T) {
-	var adapter = adapters.GetEnv()
+	var adapter = adapters.NewEnvAdapter()
 	data, err := adapter.Get("testProject", "testType")
 	if err != nil {
 		t.Error(err)
@@ -62,7 +62,7 @@ func TestEnvGet(t *testing.T) {
 }
 
 func TestEnvGetKey(t *testing.T) {
-	var adapter = adapters.GetEnv()
+	var adapter = adapters.NewEnvAdapter()
 	data, err := adapter.GetKey("testProject", "testType", "VAR_TEST_TWO")
 	if err != nil {
 		t.Error(err)
@@ -73,7 +73,7 @@ func TestEnvGetKey(t *testing.T) {
 }
 
 func TestEnvDelete(t *testing.T) {
-	var adapter = adapters.GetEnv()
+	var adapter = adapters.NewEnvAdapter()
 	err := adapter.Delete("testProject", "testType")
 	if err != nil {
 		t.Error(err)
@@ -81,7 +81,7 @@ func TestEnvDelete(t *testing.T) {
 }
 
 func TestEnvDeleteKey(t *testing.T) {
-	var adapter = adapters.GetEnv()
+	var adapter = adapters.NewEnvAdapter()
 	err := adapter.CreateKey("testProject", "testType", "VAR_TEST_TWO", []byte("2"))
 	if err != nil {
 		t.Error(err)

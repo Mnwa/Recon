@@ -6,7 +6,7 @@ import (
 )
 
 func TestConfigCreate(t *testing.T) {
-	var adapter = adapters.GetDefault()
+	var adapter = adapters.NewDefaultAdapter()
 	err := adapter.Create("testProject", "testType", []byte("VAR_TEST=1"))
 	if err != nil {
 		t.Error(err)
@@ -14,7 +14,7 @@ func TestConfigCreate(t *testing.T) {
 }
 
 func TestConfigCreateKey(t *testing.T) {
-	var adapter = adapters.GetDefault()
+	var adapter = adapters.NewDefaultAdapter()
 	err := adapter.CreateKey("testProject", "testType", "VAR_TEST_TWO", []byte("2"))
 	if err != nil {
 		t.Error(err)
@@ -22,7 +22,7 @@ func TestConfigCreateKey(t *testing.T) {
 }
 
 func TestConfigUpdate(t *testing.T) {
-	var adapter = adapters.GetDefault()
+	var adapter = adapters.NewDefaultAdapter()
 	err := adapter.Update("testProject", "testType", []byte("VAR_TEST=2"))
 	if err != nil {
 		t.Error(err)
@@ -30,7 +30,7 @@ func TestConfigUpdate(t *testing.T) {
 }
 
 func TestConfigUpdateKey(t *testing.T) {
-	var adapter = adapters.GetDefault()
+	var adapter = adapters.NewDefaultAdapter()
 	err := adapter.UpdateKey("testProject", "testType", "VAR_TEST_TWO", []byte("3"))
 	if err != nil {
 		t.Error(err)
@@ -38,7 +38,7 @@ func TestConfigUpdateKey(t *testing.T) {
 }
 
 func TestConfigGet(t *testing.T) {
-	var adapter = adapters.GetDefault()
+	var adapter = adapters.NewDefaultAdapter()
 	data, err := adapter.Get("testProject", "testType")
 	if err != nil {
 		t.Error(err)
@@ -49,7 +49,7 @@ func TestConfigGet(t *testing.T) {
 }
 
 func TestConfigGetKey(t *testing.T) {
-	var adapter = adapters.GetDefault()
+	var adapter = adapters.NewDefaultAdapter()
 	data, err := adapter.GetKey("testProject", "testType", "VAR_TEST_TWO")
 	if err != nil {
 		t.Error(err)
@@ -60,7 +60,7 @@ func TestConfigGetKey(t *testing.T) {
 }
 
 func TestConfigDelete(t *testing.T) {
-	var adapter = adapters.GetDefault()
+	var adapter = adapters.NewDefaultAdapter()
 	err := adapter.Delete("testProject", "testType")
 	if err != nil {
 		t.Error(err)
@@ -68,7 +68,7 @@ func TestConfigDelete(t *testing.T) {
 }
 
 func TestConfigDeleteKey(t *testing.T) {
-	var adapter = adapters.GetDefault()
+	var adapter = adapters.NewDefaultAdapter()
 	err := adapter.CreateKey("testProject", "testType", "VAR_TEST_TWO", []byte("2"))
 	if err != nil {
 		t.Error(err)
