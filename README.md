@@ -81,7 +81,7 @@ with `:projectType` merge priority
 
 # Thanks for community! 🎉 🎉 🎉 🎉
 Recon required that's packages:
+* [Recon Engine](https://github.com/Mnwa/ReconEngine)
 * [fasthttp](https://github.com/valyala/fasthttp)
-* [fasthttprouter](https://github.com/buaazp/fasthttprouter)
-* [fasthttp-prometheus](https://github.com/flf2ko/fasthttp-prometheus)
-* [bitcask](https://github.com/prologic/bitcask)
+* [fasthttp router](https://github.com/fasthttp/router)
+* [fasthttp prometheus](https://github.com/Mnwa/fasthttprouter-prometheus)
