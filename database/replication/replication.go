@@ -27,11 +27,11 @@ var transactionPool = sync.Pool{
 	},
 }
 
-func GetTransaction() *Transaction {
+func AcquireTransaction() *Transaction {
 	return transactionPool.Get().(*Transaction)
 }
 
-func PutTransaction(transaction *Transaction) {
+func ReleaseTransaction(transaction *Transaction) {
 	transaction.Reset()
 	transactionPool.Put(transaction)
 }
@@ -40,7 +40,7 @@ func (r *Replication) Receive() {
 	for {
 		transaction := <-r.Receiver
 
-		go func() {
+		go func(transaction *Transaction) {
 			for key, data := range transaction.Data {
 				if timestamp, ok := r.Received[key]; ok && timestamp <= transaction.Timestamp {
 					continue
@@ -51,8 +51,8 @@ func (r *Replication) Receive() {
 				r.Received[key] = transaction.Timestamp
 			}
 
-			PutTransaction(transaction)
-		}()
+			ReleaseTransaction(transaction)
+		}(transaction)
 	}
 }
 
@@ -63,7 +63,7 @@ func (r *Replication) Transmit() {
 		if len(r.Replicas) == 0 {
 			continue
 		}
-		go func() {
+		go func(transaction *Transaction) {
 			body, err := proto.Marshal(transaction)
 
 			if err == nil {
@@ -89,8 +89,8 @@ func (r *Replication) Transmit() {
 				log.Println("Replication error:", err)
 			}
 
-			PutTransaction(transaction)
-		}()
+			ReleaseTransaction(transaction)
+		}(transaction)
 	}
 }
 
@@ -116,18 +116,22 @@ func NewReplication(replications []string) *Replication {
 }
 
 func NewTransaction(data map[string][]byte) *Transaction {
-	transaction := GetTransaction()
+	transaction := AcquireTransaction()
 	transaction.Timestamp = time.Now().UnixNano()
 	transaction.Data = data
 	return transaction
 }
 
 func init() {
+	if os.Getenv("RECON_REPLICATION_HOSTS") == "" {
+		Replica = NewReplication([]string{})
+		return
+	}
 	replicationHosts := strings.Split(os.Getenv("RECON_REPLICATION_HOSTS"), ",")
 	Replica = NewReplication(replicationHosts)
 	go Replica.Receive()
 
-	if os.Getenv("RECON_REPLICATION_HOSTS") != "" && len(replicationHosts) > 0 {
+	if len(replicationHosts) > 0 {
 		go Replica.Transmit()
 
 		if os.Getenv("RECON_REPLICATION_INIT") != "off" {

@@ -7,8 +7,8 @@ import (
 	"log"
 )
 
-func RecieveMessagesReplication(ctx *fasthttp.RequestCtx) {
-	transaction := replication.GetTransaction()
+func ReceiveMessagesReplication(ctx *fasthttp.RequestCtx) {
+	transaction := replication.AcquireTransaction()
 	err := proto.Unmarshal(ctx.PostBody(), transaction)
 	if err == nil {
 		replication.Replica.Receiver <- transaction

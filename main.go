@@ -51,7 +51,7 @@ func main() {
 	r.GET("/backup", controllers.GetBackup)
 	r.POST("/backup", controllers.RestoreBackup)
 
-	r.POST("/replication/receiver", controllers.RecieveMessagesReplication)
+	r.POST("/replication/receiver", controllers.ReceiveMessagesReplication)
 
 	// Env based
 	r.GET("/projects/:project/:type/env", controllers.GetEnv)
