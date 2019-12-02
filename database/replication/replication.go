@@ -81,6 +81,9 @@ func (r *Replication) Transmit() {
 					if err != nil {
 						log.Println("Master", addr, "is down:", err)
 					}
+
+					fasthttp.ReleaseRequest(req)
+					fasthttp.ReleaseResponse(resp)
 				}
 			} else {
 				log.Println("Replication error:", err)
