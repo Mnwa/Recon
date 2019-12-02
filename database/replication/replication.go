@@ -146,6 +146,8 @@ func init() {
 
 				if err == nil {
 					err = backup.RestoreBackup(resp.Body())
+					fasthttp.ReleaseRequest(req)
+					fasthttp.ReleaseResponse(resp)
 					if err == nil {
 						break
 					} else {
