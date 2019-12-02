@@ -7,30 +7,29 @@ import (
 	"errors"
 	"log"
 	"strings"
-	"sync"
 )
 
-type Default struct {
-	data map[string][]byte
-}
+type Default struct{}
 
-func (e *Default) parseDefault(data []byte) {
+func (e *Default) parseDefault(data []byte) map[string][]byte {
+	result := make(map[string][]byte)
 	for _, val := range strings.Split(string(data), "\n") {
 		if val != "" {
 			row := strings.SplitN(val, "=", 2)
 			if len(row) == 2 {
-				e.data[strings.TrimSpace(row[0])] = []byte(strings.TrimSpace(row[1]))
+				result[strings.TrimSpace(row[0])] = []byte(strings.TrimSpace(row[1]))
 			}
 		}
 	}
+	return result
 }
 
 func (e *Default) Create(project string, projectType string, data []byte) error {
 	var err error
 	replicationData := make(map[string][]byte)
 	_ = e.Delete(project, projectType)
-	e.parseDefault(data)
-	for key, value := range e.data {
+	parsedData := e.parseDefault(data)
+	for key, value := range parsedData {
 		storageKey := strings.ToLower(project + "/" + projectType + "/" + key)
 		database.Client.Set(storageKey, value)
 		replicationData[storageKey] = value
@@ -56,8 +55,8 @@ func (e *Default) Update(project string, projectType string, data []byte) error 
 	var err error
 	replicationData := make(map[string][]byte)
 
-	e.parseDefault(data)
-	for key, value := range e.data {
+	parsedData := e.parseDefault(data)
+	for key, value := range parsedData {
 		storageKey := strings.ToLower(project + "/" + projectType + "/" + key)
 		database.Client.Set(storageKey, value)
 
@@ -87,23 +86,26 @@ func (e *Default) UpdateKey(project string, projectType string, key string, data
 
 func (e *Default) Get(project string, projectType string) ([]byte, error) {
 	var data = ""
+	result := make(map[string][]byte)
 	if projectType != "default" {
-		_, err := e.Get(project, "default")
+		defaultData, err := e.Get(project, "default")
 
 		if err != nil {
 			return nil, err
 		}
+
+		result = e.parseDefault(defaultData)
 	}
 	storageKey := strings.ToLower(project + "/" + projectType + "/")
 	database.Client.Scan(storageKey, func(key string, value []byte) bool {
 		// 0x04 byte is removed val
 		if !bytes.Equal(value, []byte{0x04}) {
-			e.data[strings.ToUpper(strings.ReplaceAll(key, storageKey, ""))] = value
+			result[strings.ReplaceAll(key, storageKey, "")] = value
 		}
 		return true
 	})
 
-	for key, value := range e.data {
+	for key, value := range result {
 		data += key + "=" + string(value) + "\n"
 	}
 	return []byte(data), nil
@@ -146,20 +148,6 @@ func (e *Default) DeleteKey(project string, projectType string, key string) erro
 	return err
 }
 
-func GetDefault() *Default {
-	return defaultPool.Get().(*Default)
-}
-
-func PutDefault(e *Default) {
-	e.data = make(map[string][]byte)
-
-	defaultPool.Put(e)
-}
-
-var defaultPool = sync.Pool{
-	New: func() interface{} {
-		return &Default{
-			data: make(map[string][]byte),
-		}
-	},
+func NewDefaultAdapter() Adapter {
+	return &Default{}
 }

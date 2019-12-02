@@ -5,83 +5,67 @@ import (
 	"github.com/valyala/fasthttp"
 )
 
-func CreateDefault(ctx *fasthttp.RequestCtx) {
-	var adapter = adapters.GetDefault()
+var defaultAdapter = adapters.NewDefaultAdapter()
 
+func CreateDefault(ctx *fasthttp.RequestCtx) {
 	body := ctx.PostBody()
 	project := ctx.UserValue("project").(string)
 	projectType := ctx.UserValue("type").(string)
-	err := adapter.Create(project, projectType, body)
+	err := defaultAdapter.Create(project, projectType, body)
 	if err == nil {
 		ctx.SetBody(body)
 	} else {
 		ctx.SetStatusCode(fasthttp.StatusBadRequest)
 		ctx.SetBodyString(err.Error())
 	}
-
-	adapters.PutDefault(adapter)
 }
 
 func CreateKeyDefault(ctx *fasthttp.RequestCtx) {
-	var adapter = adapters.GetDefault()
-
 	body := ctx.PostBody()
 	project := ctx.UserValue("project").(string)
 	projectType := ctx.UserValue("type").(string)
 	key := ctx.UserValue("key").(string)
-	err := adapter.CreateKey(project, projectType, key, body)
+	err := defaultAdapter.CreateKey(project, projectType, key, body)
 	if err == nil {
 		ctx.SetBody(body)
 	} else {
 		ctx.SetStatusCode(fasthttp.StatusBadRequest)
 		ctx.SetBodyString(err.Error())
 	}
-
-	adapters.PutDefault(adapter)
 }
 
 func UpdateDefault(ctx *fasthttp.RequestCtx) {
-	var adapter = adapters.GetDefault()
-
 	body := ctx.PostBody()
 	project := ctx.UserValue("project").(string)
 	projectType := ctx.UserValue("type").(string)
-	err := adapter.Update(project, projectType, body)
+	err := defaultAdapter.Update(project, projectType, body)
 	if err == nil {
-		data, _ := adapter.Get(project, projectType)
+		data, _ := defaultAdapter.Get(project, projectType)
 		ctx.SetBody(data)
 	} else {
 		ctx.SetStatusCode(fasthttp.StatusBadRequest)
 		ctx.SetBodyString(err.Error())
 	}
-
-	adapters.PutDefault(adapter)
 }
 
 func UpdateKeyDefault(ctx *fasthttp.RequestCtx) {
-	var adapter = adapters.GetDefault()
-
 	body := ctx.PostBody()
 	project := ctx.UserValue("project").(string)
 	projectType := ctx.UserValue("type").(string)
 	key := ctx.UserValue("key").(string)
-	err := adapter.UpdateKey(project, projectType, key, body)
+	err := defaultAdapter.UpdateKey(project, projectType, key, body)
 	if err == nil {
 		ctx.SetBody(body)
 	} else {
 		ctx.SetStatusCode(fasthttp.StatusBadRequest)
 		ctx.SetBodyString(err.Error())
 	}
-
-	adapters.PutDefault(adapter)
 }
 
 func GetDefault(ctx *fasthttp.RequestCtx) {
-	var adapter = adapters.GetDefault()
-
 	project := ctx.UserValue("project").(string)
 	projectType := ctx.UserValue("type").(string)
-	body, err := adapter.Get(project, projectType)
+	body, err := defaultAdapter.Get(project, projectType)
 	if err == nil {
 		if ctx.Request.Header.HasAcceptEncoding("gzip") {
 			ctx.Response.Header.Add("Content-Encoding", "gzip")
@@ -93,56 +77,42 @@ func GetDefault(ctx *fasthttp.RequestCtx) {
 		ctx.SetStatusCode(fasthttp.StatusBadRequest)
 		ctx.SetBodyString(err.Error())
 	}
-
-	adapters.PutDefault(adapter)
 }
 
 func GetKeyDefault(ctx *fasthttp.RequestCtx) {
-	var adapter = adapters.GetDefault()
-
 	project := ctx.UserValue("project").(string)
 	projectType := ctx.UserValue("type").(string)
 	key := ctx.UserValue("key").(string)
-	body, err := adapter.GetKey(project, projectType, key)
+	body, err := defaultAdapter.GetKey(project, projectType, key)
 	if err == nil {
 		ctx.SetBody(body)
 	} else {
 		ctx.SetStatusCode(fasthttp.StatusBadRequest)
 		ctx.SetBodyString(err.Error())
 	}
-
-	adapters.PutDefault(adapter)
 }
 
 func DeleteDefault(ctx *fasthttp.RequestCtx) {
-	var adapter = adapters.GetDefault()
-
 	project := ctx.UserValue("project").(string)
 	projectType := ctx.UserValue("type").(string)
-	err := adapter.Delete(project, projectType)
+	err := defaultAdapter.Delete(project, projectType)
 	if err == nil {
 		ctx.SetBodyString("Deleted")
 	} else {
 		ctx.SetStatusCode(fasthttp.StatusBadRequest)
 		ctx.SetBodyString(err.Error())
 	}
-
-	adapters.PutDefault(adapter)
 }
 
 func DeleteKeyDefault(ctx *fasthttp.RequestCtx) {
-	var adapter = adapters.GetDefault()
-
 	project := ctx.UserValue("project").(string)
 	projectType := ctx.UserValue("type").(string)
 	key := ctx.UserValue("key").(string)
-	err := adapter.DeleteKey(project, projectType, key)
+	err := defaultAdapter.DeleteKey(project, projectType, key)
 	if err == nil {
 		ctx.SetBodyString("Deleted")
 	} else {
 		ctx.SetStatusCode(fasthttp.StatusBadRequest)
 		ctx.SetBodyString(err.Error())
 	}
-
-	adapters.PutDefault(adapter)
 }
