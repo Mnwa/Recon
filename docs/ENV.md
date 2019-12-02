@@ -84,6 +84,8 @@ Cache-Control: no-cache
 ###
 
 10
+
+# Or 'that key was removed' message
 ```
 
 ## DELETE project environment
