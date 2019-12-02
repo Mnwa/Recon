@@ -2,12 +2,12 @@
 
 
 [[projects]]
-  digest = "1:ca73e5aed7c9e5d1b6ddb2f1f0ddab2461140afaaf596077d1b79c19425daeab"
+  digest = "1:8bc120fdc765dd0e387750eb059d5e795a782a8fb9683644b4a525d36d3ae3ac"
   name = "github.com/Mnwa/ReconEngine"
   packages = ["."]
   pruneopts = "UT"
-  revision = "833eee288f0bcabf45e7d349b037a55017a5f286"
-  version = "2.1.5"
+  revision = "491344a7f027bd1824d2a980d61b467a8db34ed7"
+  version = "3.0"
 
 [[projects]]
   digest = "1:ba1ec6376854b9bb09599c6e82e6dcf09786a065a136107a7ee6404b0d912bcb"

@@ -10,11 +10,9 @@ var Client reconEngine.MemStorage
 func init() {
 	dbDir := os.Getenv("RECON_DB_DIR")
 	if dbDir == "" {
-		dbDir = "/tmp/test_recon"
+		dbDir = os.TempDir() + "/test_recon"
 	}
 	_ = os.Mkdir(dbDir, 0750)
 
-	reconEngine.BinDir = dbDir
-
-	Client = reconEngine.NewMem(nil)
+	Client = reconEngine.NewMem(nil, &dbDir)
 }
