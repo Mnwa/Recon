@@ -6,7 +6,7 @@
 [![Repository Size](https://img.shields.io/github/repo-size/Mnwa/Recon.svg)](https://github.com/Mnwa/Recon)
 
 Recon is the simple solution for storing configs of you application.
-There is no specified instruments, no specified data protocols. For the full power using of Recon you needed only `curl`.
+There are no specified instruments, no specified data protocols. For the full power of Recon you only need `curl`.
 
 ## Examples
 
@@ -43,24 +43,24 @@ Recon DB support two data storing types:
 
 ## Structure of projects
 
-Every project on Recon DB have are `default` type. Also you can add anything types to every projects for differentiation of configs and when you get custom project type, it will be merged with the default project type.
+Every project on Recon DB has a `default` type. Also you can add any types to any projects for differentiation of configs and when you get custom project type, it will be merged with the default project type.
 
-As example lets imagine the simple application, who stored on two data centres `1` and `2`. 
-It's application have a `AWS secret key`, what's same for all data centres and it's have `Database url`, what's different on `1` and `2` data centres.
-In order not to duplicate configs of `AWS secret key` we can add it to `default` project type
+As an example lets imagine a simple application, which is stored on two data centres `1` and `2`. 
+This application has a `AWS secret key`, that is same for all data centres and the application has a `Database url`, that is different for `1` and `2` data centres.
+In order not to duplicate configs of `AWS secret key` we can add it to `default` project type.
 
 ```bash
 curl -X POST -d 'AWS_KEY=123' http://localhost:8080/projects/myApp/default/env
 ```
 
-And after add `DATABASE URL` to the different project types
+And after that add `DATABASE URL` to the different project types
 
 ```bash
 curl -X POST -d 'DATABASE_URL=localhost1' http://localhost:8080/projects/myApp/usa/env
 curl -X POST -d 'DATABASE_URL=localhost2' http://localhost:8080/projects/myApp/europe/env
 ```
 
-Now you can get fully config for every place
+Now you can get a full config for every place
 
 ```bash
 curl http://localhost:8080/projects/myApp/usa/env
