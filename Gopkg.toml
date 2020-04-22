@@ -40,3 +40,7 @@
 [[constraint]]
   name = "github.com/Mnwa/ReconEngine"
   version = "3.0"
+
+[[constraint]]
+  name = "github.com/golang/protobuf"
+  version = "1.4.0"

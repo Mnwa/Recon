@@ -3,7 +3,7 @@ package replication
 import (
 	"Recon/backup"
 	"Recon/database"
-	"github.com/gogo/protobuf/proto"
+	"github.com/golang/protobuf/proto"
 	"github.com/valyala/fasthttp"
 	"log"
 	"os"

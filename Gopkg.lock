@@ -211,6 +211,8 @@
     "github.com/gogo/protobuf/proto",
     "github.com/golang/protobuf/proto",
     "github.com/valyala/fasthttp",
+    "google.golang.org/protobuf/reflect/protoreflect",
+    "google.golang.org/protobuf/runtime/protoimpl",
   ]
   solver-name = "gps-cdcl"
   solver-version = 1

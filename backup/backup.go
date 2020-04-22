@@ -2,7 +2,7 @@ package backup
 
 import (
 	"Recon/database"
-	"github.com/gogo/protobuf/proto"
+	"github.com/golang/protobuf/proto"
 )
 
 func CreateBackup() ([]byte, error) {
