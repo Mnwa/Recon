@@ -10,26 +10,13 @@ import (
 
 type Env struct{}
 
-func (e *Env) parseEnv(data []byte) map[string][]byte {
-	result := make(map[string][]byte)
-	for _, val := range strings.Split(string(data), "\n") {
-		if val != "" {
-			row := strings.SplitN(val, "=", 2)
-			if len(row) == 2 {
-				result[strings.TrimSpace(row[0])] = []byte(strings.TrimSpace(row[1]))
-			}
-		}
-	}
-	return result
-}
-
-func (e *Env) Create(project string, projectType string, data []byte) (err error) {
+func (e *Env) Create(project string, projectType string, data []byte) error {
 	replicationData := make(map[string][]byte)
-	err = e.Delete(project, projectType)
+	err := e.Delete(project, projectType)
 	if err != nil {
-		return
+		return err
 	}
-	parsedData := e.parseEnv(data)
+	parsedData := parseEnv(data)
 	for key, value := range parsedData {
 		storageKey := strings.ToLower(project + "/" + projectType + "/" + key)
 		database.Client.Set(storageKey, value)
@@ -37,7 +24,7 @@ func (e *Env) Create(project string, projectType string, data []byte) (err error
 		replicationData[storageKey] = value
 	}
 	go replication.Replica.SendMessage(replicationData)
-	return
+	return err
 }
 
 func (e *Env) CreateKey(project string, projectType string, key string, data []byte) error {
@@ -55,7 +42,7 @@ func (e *Env) CreateKey(project string, projectType string, key string, data []b
 func (e *Env) Update(project string, projectType string, data []byte) error {
 	replicationData := make(map[string][]byte)
 
-	parsedData := e.parseEnv(data)
+	parsedData := parseEnv(data)
 	for key, value := range parsedData {
 		storageKey := strings.ToLower(project + "/" + projectType + "/" + key)
 		database.Client.Set(storageKey, value)
@@ -94,7 +81,7 @@ func (e *Env) Get(project string, projectType string) ([]byte, error) {
 			return nil, err
 		}
 
-		result = e.parseEnv(defaultData)
+		result = parseEnv(defaultData)
 	}
 	storageKey := strings.ToLower(project + "/" + projectType + "/")
 	database.Client.Scan(storageKey, func(key string, value []byte) bool {
@@ -148,4 +135,17 @@ func (e *Env) DeleteKey(project string, projectType string, key string) error {
 
 func NewEnvAdapter() Adapter {
 	return &Env{}
+}
+
+func parseEnv(data []byte) map[string][]byte {
+	result := make(map[string][]byte)
+	for _, val := range strings.Split(string(data), "\n") {
+		if val != "" {
+			row := strings.SplitN(val, "=", 2)
+			if len(row) == 2 {
+				result[strings.TrimSpace(row[0])] = []byte(strings.TrimSpace(row[1]))
+			}
+		}
+	}
+	return result
 }

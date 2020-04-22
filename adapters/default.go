@@ -11,9 +11,8 @@ import (
 type Default struct{}
 
 func (e *Default) Create(project string, projectType string, data []byte) error {
-	var err error
 	replicationData := make(map[string][]byte)
-	err = e.Delete(project, projectType)
+	err := e.Delete(project, projectType)
 	if err != nil {
 		return err
 	}
