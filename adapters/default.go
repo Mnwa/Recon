@@ -5,30 +5,19 @@ import (
 	"Recon/database/replication"
 	"bytes"
 	"errors"
-	"log"
 	"strings"
 )
 
 type Default struct{}
 
-func (e *Default) parseDefault(data []byte) map[string][]byte {
-	result := make(map[string][]byte)
-	for _, val := range strings.Split(string(data), "\n") {
-		if val != "" {
-			row := strings.SplitN(val, "=", 2)
-			if len(row) == 2 {
-				result[strings.TrimSpace(row[0])] = []byte(strings.TrimSpace(row[1]))
-			}
-		}
-	}
-	return result
-}
-
 func (e *Default) Create(project string, projectType string, data []byte) error {
 	var err error
 	replicationData := make(map[string][]byte)
-	_ = e.Delete(project, projectType)
-	parsedData := e.parseDefault(data)
+	err = e.Delete(project, projectType)
+	if err != nil {
+		return err
+	}
+	parsedData := parseDefault(data)
 	for key, value := range parsedData {
 		storageKey := strings.ToLower(project + "/" + projectType + "/" + key)
 		database.Client.Set(storageKey, value)
@@ -55,7 +44,7 @@ func (e *Default) Update(project string, projectType string, data []byte) error 
 	var err error
 	replicationData := make(map[string][]byte)
 
-	parsedData := e.parseDefault(data)
+	parsedData := parseDefault(data)
 	for key, value := range parsedData {
 		storageKey := strings.ToLower(project + "/" + projectType + "/" + key)
 		database.Client.Set(storageKey, value)
@@ -94,11 +83,11 @@ func (e *Default) Get(project string, projectType string) ([]byte, error) {
 			return nil, err
 		}
 
-		result = e.parseDefault(defaultData)
+		result = parseDefault(defaultData)
 	}
 	storageKey := strings.ToLower(project + "/" + projectType + "/")
 	database.Client.Scan(storageKey, func(key string, value []byte) bool {
-		// 0x04 byte is removed val
+		// 0x04 byte is removed value marker
 		if !bytes.Equal(value, []byte{0x04}) {
 			result[strings.ReplaceAll(key, storageKey, "")] = value
 		}
@@ -121,18 +110,19 @@ func (e *Default) Delete(project string, projectType string) error {
 	replicationData := make(map[string][]byte)
 
 	storageKey := strings.ToLower(project + "/" + projectType + "/")
+	var resErr error
 	database.Client.Scan(storageKey, func(key string, value []byte) bool {
 		err := database.Client.Del(key)
 		if err == nil {
 			replicationData[storageKey] = nil
 			go replication.Replica.SendMessage(replicationData)
-			log.Println(err)
 			return true
 		}
+		resErr = err
 
 		return false
 	})
-	return nil
+	return resErr
 }
 
 func (e *Default) DeleteKey(project string, projectType string, key string) error {
@@ -150,4 +140,17 @@ func (e *Default) DeleteKey(project string, projectType string, key string) erro
 
 func NewDefaultAdapter() Adapter {
 	return &Default{}
+}
+
+func parseDefault(data []byte) map[string][]byte {
+	result := make(map[string][]byte)
+	for _, val := range strings.Split(string(data), "\n") {
+		if val != "" {
+			row := strings.SplitN(val, "=", 2)
+			if len(row) == 2 {
+				result[strings.TrimSpace(row[0])] = []byte(strings.TrimSpace(row[1]))
+			}
+		}
+	}
+	return result
 }

@@ -96,7 +96,7 @@ func (e *Env) Get(project string, projectType string) ([]byte, error) {
 	}
 	storageKey := strings.ToLower(project + "/" + projectType + "/")
 	database.Client.Scan(storageKey, func(key string, value []byte) bool {
-		// 0x04 byte is removed val
+		// 0x04 byte is removed value marker
 		if !bytes.Equal(value, []byte{0x04}) {
 			result[strings.ToUpper(strings.ReplaceAll(key, storageKey, ""))] = value
 		}
@@ -119,6 +119,7 @@ func (e *Env) Delete(project string, projectType string) error {
 	replicationData := make(map[string][]byte)
 
 	storageKey := strings.ToLower(project + "/" + projectType + "/")
+	var resErr error
 	database.Client.Scan(storageKey, func(key string, value []byte) bool {
 		err := database.Client.Del(key)
 		if err == nil {
@@ -126,9 +127,10 @@ func (e *Env) Delete(project string, projectType string) error {
 			go replication.Replica.SendMessage(replicationData)
 			return true
 		}
+		resErr = err
 		return false
 	})
-	return nil
+	return resErr
 }
 
 func (e *Env) DeleteKey(project string, projectType string, key string) error {
