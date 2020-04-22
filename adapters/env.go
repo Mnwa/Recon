@@ -23,10 +23,12 @@ func (e *Env) parseEnv(data []byte) map[string][]byte {
 	return result
 }
 
-func (e *Env) Create(project string, projectType string, data []byte) error {
-	var err error
+func (e *Env) Create(project string, projectType string, data []byte) (err error) {
 	replicationData := make(map[string][]byte)
-	_ = e.Delete(project, projectType)
+	err = e.Delete(project, projectType)
+	if err != nil {
+		return
+	}
 	parsedData := e.parseEnv(data)
 	for key, value := range parsedData {
 		storageKey := strings.ToLower(project + "/" + projectType + "/" + key)
@@ -35,7 +37,7 @@ func (e *Env) Create(project string, projectType string, data []byte) error {
 		replicationData[storageKey] = value
 	}
 	go replication.Replica.SendMessage(replicationData)
-	return err
+	return
 }
 
 func (e *Env) CreateKey(project string, projectType string, key string, data []byte) error {
@@ -51,7 +53,6 @@ func (e *Env) CreateKey(project string, projectType string, key string, data []b
 }
 
 func (e *Env) Update(project string, projectType string, data []byte) error {
-	var err error
 	replicationData := make(map[string][]byte)
 
 	parsedData := e.parseEnv(data)
@@ -62,7 +63,8 @@ func (e *Env) Update(project string, projectType string, data []byte) error {
 		replicationData[storageKey] = value
 	}
 	go replication.Replica.SendMessage(replicationData)
-	return err
+
+	return nil
 }
 
 func (e *Env) UpdateKey(project string, projectType string, key string, data []byte) error {
@@ -115,22 +117,20 @@ func (e *Env) GetKey(project string, projectType string, key string) ([]byte, er
 	return value, err
 }
 
-func (e *Env) Delete(project string, projectType string) error {
+func (e *Env) Delete(project string, projectType string) (err error) {
 	replicationData := make(map[string][]byte)
 
 	storageKey := strings.ToLower(project + "/" + projectType + "/")
-	var resErr error
 	database.Client.Scan(storageKey, func(key string, value []byte) bool {
-		err := database.Client.Del(key)
+		err = database.Client.Del(key)
 		if err == nil {
 			replicationData[storageKey] = nil
 			go replication.Replica.SendMessage(replicationData)
 			return true
 		}
-		resErr = err
 		return false
 	})
-	return resErr
+	return
 }
 
 func (e *Env) DeleteKey(project string, projectType string, key string) error {

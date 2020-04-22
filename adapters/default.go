@@ -41,7 +41,6 @@ func (e *Default) CreateKey(project string, projectType string, key string, data
 }
 
 func (e *Default) Update(project string, projectType string, data []byte) error {
-	var err error
 	replicationData := make(map[string][]byte)
 
 	parsedData := parseDefault(data)
@@ -53,7 +52,7 @@ func (e *Default) Update(project string, projectType string, data []byte) error 
 	}
 	go replication.Replica.SendMessage(replicationData)
 
-	return err
+	return nil
 }
 
 func (e *Default) UpdateKey(project string, projectType string, key string, data []byte) error {
@@ -106,23 +105,21 @@ func (e *Default) GetKey(project string, projectType string, key string) ([]byte
 	return value, err
 }
 
-func (e *Default) Delete(project string, projectType string) error {
+func (e *Default) Delete(project string, projectType string) (err error) {
 	replicationData := make(map[string][]byte)
 
 	storageKey := strings.ToLower(project + "/" + projectType + "/")
-	var resErr error
 	database.Client.Scan(storageKey, func(key string, value []byte) bool {
-		err := database.Client.Del(key)
+		err = database.Client.Del(key)
 		if err == nil {
 			replicationData[storageKey] = nil
 			go replication.Replica.SendMessage(replicationData)
 			return true
 		}
-		resErr = err
 
 		return false
 	})
-	return resErr
+	return
 }
 
 func (e *Default) DeleteKey(project string, projectType string, key string) error {
